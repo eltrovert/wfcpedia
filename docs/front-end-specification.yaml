@@ -1,0 +1,395 @@
+# WFC-Pedia Front-End Specification
+# Generated based on PRD and Project Brief Analysis
+
+project_info:
+  name: "WFC-Pedia"
+  description: "Community-owned platform for Indonesian remote workers to discover and share work-friendly cafés"
+  version: "MVP 1.0"
+  target_platform: "Web Responsive (Mobile-First)"
+  primary_users: "Indonesian Remote Workers"
+
+design_system:
+  philosophy: "Functional simplicity over visual polish - community bulletin board aesthetic"
+  brand_identity:
+    theme: "Wikipedia reliability meets local café community board"
+    aesthetic: "Ultra-lean, constraint-driven authenticity"
+    tone: "Unpretentious, practical, community-owned"
+  
+  color_palette:
+    primary: "#2D5A27" # Coffee green
+    secondary: "#8B4513" # Coffee brown  
+    accent: "#FF6B35" # Warm orange for CTAs
+    background: "#FAFAFA" # Clean white
+    text_primary: "#2C3E50"
+    text_secondary: "#7F8C8D"
+    success: "#27AE60"
+    warning: "#F39C12"
+    error: "#E74C3C"
+  
+  typography:
+    primary_font: "Inter, -apple-system, BlinkMacSystemFont, sans-serif"
+    headings: "600 weight, 1.2 line-height"
+    body: "400 weight, 1.5 line-height"
+    caption: "14px, 400 weight"
+  
+  spacing:
+    base_unit: "8px"
+    component_padding: "16px"
+    section_margin: "24px"
+    card_gap: "12px"
+
+responsive_breakpoints:
+  mobile: "320px - 768px" # Primary focus
+  tablet: "768px - 1024px"
+  desktop: "1024px+"
+  
+  mobile_first_approach: true
+  touch_targets: "44px minimum"
+  thumb_zone_navigation: true
+
+core_components:
+
+  # 1. Navigation Components
+  bottom_navigation:
+    position: "Fixed bottom"
+    height: "60px"
+    items:
+      - icon: "home" | label: "Discover" | route: "/"
+      - icon: "filter" | label: "Filter" | route: "/filter"  
+      - icon: "add" | label: "Add Café" | route: "/add"
+      - icon: "journal" | label: "Journal" | route: "/journal"
+      - icon: "community" | label: "Community" | route: "/community"
+    accessibility: "ARIA labels, keyboard navigation"
+  
+  # 2. Café Display Components
+  cafe_card:
+    layout: "Vertical card with image, overlay info"
+    dimensions: "Full width, 200px height"
+    content:
+      hero_image: "Aspect ratio 16:9, lazy loading"
+      overlay_info:
+        - cafe_name: "H3, white text with shadow"
+        - location: "Caption, secondary text"
+        - quick_stats: "Wifi icon + speed, comfort rating stars"
+        - love_count: "Heart icon + number"
+      action_area:
+        - love_button: "Heart icon, toggle state"
+        - share_button: "Share icon, native sharing"
+        - details_link: "Tap anywhere on card"
+    states: ["default", "loading", "error", "favorited"]
+  
+  cafe_gallery:
+    layout: "Masonry grid, 2 columns on mobile"
+    infinite_scroll: true
+    pull_to_refresh: true
+    empty_state: "Illustration + CTA to add first café"
+    loading_state: "Skeleton cards"
+  
+  # 3. Filter & Search Components  
+  location_selector:
+    type: "Expandable search with geolocation"
+    options:
+      - current_location: "GPS icon + 'Near Me'"
+      - city_search: "Autocomplete Indonesian cities"
+      - manual_location: "Pin on map option"
+    geolocation_prompt: "One-time permission request"
+  
+  work_criteria_filters:
+    wifi_speed:
+      type: "Icon-based selection"
+      options: ["1-5 Mbps", "5-10 Mbps", "10+ Mbps", "Fiber"]
+      visual: "Signal strength icons"
+    
+    comfort_level:
+      type: "Star rating selector" 
+      range: "1-5 stars"
+      labels: ["Basic", "Comfortable", "Premium"]
+    
+    noise_level:
+      type: "Icon selection"
+      options: ["Quiet", "Moderate", "Lively"]
+      visual: "Sound wave icons"
+    
+    amenities:
+      type: "Checkbox grid"
+      options: ["24/7 Open", "Power Outlets", "AC", "Good Lighting", "Food Available"]
+      layout: "2x3 grid on mobile"
+  
+  # 4. Café Details Components
+  cafe_hero_section:
+    image_gallery: "Swipeable horizontal scroll"
+    quick_actions:
+      - check_in_button: "Primary CTA, green"
+      - favorite_button: "Heart toggle"
+      - share_button: "Native share API"
+      - directions_button: "Opens maps app"
+  
+  work_metrics_display:
+    layout: "Icon + label + value cards"
+    metrics:
+      - wifi_speed: "Signal icon + speed test results"
+      - comfort_rating: "Star display + average"
+      - noise_level: "Sound waves + current status"
+      - busy_status: "People icon + crowding level"
+    real_time_indicator: "Green dot for live data"
+  
+  # 5. User Input Components
+  rating_widget:
+    love_system: "Heart button with animation"
+    quick_rate: "Thumb up/down for speed"
+    detailed_rate: "Modal with work-specific criteria"
+    anonymous_option: true
+  
+  comment_system:
+    quick_comment: "Predefined useful phrases"
+    custom_comment: "Text area with 280 char limit"
+    photo_attachment: "Camera + gallery options"
+    moderation_note: "Community guidelines reminder"
+  
+  # 6. Personal Tracking Components  
+  wfc_journal_card:
+    visit_summary: "Date, duration, productivity rating"
+    achievements: "Badge collection display"
+    weekly_stats: "Chart of work sessions"
+    favorite_spots: "Top 3 cafés with stats"
+  
+  # 7. Form Components
+  add_cafe_form:
+    sections:
+      basic_info:
+        - cafe_name: "Text input, required"
+        - location: "Map picker + address input"
+        - operating_hours: "Time picker grid"
+      
+      work_criteria:
+        - wifi_speed: "Speed test integration or manual"
+        - comfort_rating: "Star selector"
+        - noise_assessment: "Icon selection"
+        - amenities: "Checkbox list"
+      
+      media_upload:
+        - photos: "Camera + gallery, max 5 images"
+        - compression: "Auto-compress for mobile upload"
+      
+      submission:
+        - community_guidelines: "Checkbox acknowledgment"
+        - submit_button: "Loading state feedback"
+
+screen_specifications:
+
+  # Screen 1: Gallery Discovery (Home)
+  home_screen:
+    layout: "Header + Gallery + Bottom Nav"
+    header:
+      logo: "WFC-Pedia text logo, left aligned"
+      location_chip: "Current location, tappable"
+      search_icon: "Opens location selector"
+    
+    main_content:
+      hero_section: "Welcome message for new users"
+      filter_bar: "Horizontal scroll chips for quick filters"
+      cafe_gallery: "Masonry grid with infinite scroll"
+      floating_add_button: "Fixed position, bottom right"
+    
+    interactions:
+      - pull_to_refresh: "Updates café data"
+      - filter_selection: "Applies instantly"
+      - café_tap: "Navigate to details"
+      - add_tap: "Navigate to add form"
+  
+  # Screen 2: Advanced Filter
+  filter_screen:
+    layout: "Header + Filter Sections + Apply Button"
+    sections:
+      - location_selection: "Expandable with map"
+      - work_criteria: "Collapsible sections"
+      - availability: "Time-based filters"  
+      - community_filters: "Highly rated, recently added"
+    
+    footer:
+      clear_filters: "Secondary button"
+      apply_filters: "Primary button with results count"
+      
+    state_management: "Persists selections, shows active filter count"
+
+  # Screen 3: Café Detail
+  detail_screen:
+    layout: "Hero + Content Sections + Sticky Actions"
+    hero_section: "Images + quick actions"
+    
+    content_sections:
+      - work_metrics: "Stats cards with icons"
+      - location_info: "Address + directions + map"
+      - operating_hours: "Current status + weekly schedule"  
+      - community_reviews: "Recent comments with ratings"
+      - photo_gallery: "User-submitted images"
+    
+    sticky_actions:
+      position: "Bottom of screen"
+      buttons: ["Check In", "Add to Favorites"]
+    
+    modals:
+      - check_in_modal: "Confirm arrival + start session"
+      - rating_modal: "Post-visit feedback form"
+      - photo_viewer: "Full-screen image gallery"
+
+  # Screen 4: Add Café  
+  add_cafe_screen:
+    layout: "Progress Header + Form Sections + Actions"
+    progress_indicator: "Step 1 of 3 style"
+    
+    form_sections:
+      step1_basic: "Name, location, hours"
+      step2_criteria: "Work-specific ratings" 
+      step3_media: "Photos and final details"
+    
+    validation:
+      inline_validation: "Real-time field feedback"
+      submission_feedback: "Success/error states"
+      draft_saving: "Auto-save progress"
+
+  # Screen 5: WFC Journal Dashboard
+  journal_screen:
+    layout: "Stats Header + Activity Feed + Analytics"
+    
+    stats_header:
+      - total_visits: "Counter with growth indicator"
+      - favorite_cafes: "Top 3 with thumbnails"
+      - productivity_score: "Weekly average"
+    
+    activity_feed:
+      - recent_visits: "Chronological list with ratings"
+      - achievements: "Badge unlocks and progress"
+      - weekly_recap: "Summary cards"
+    
+    analytics_section:
+      - visit_heatmap: "Calendar view of work sessions"
+      - preference_insights: "Favorite work conditions"
+
+accessibility_requirements:
+  wcag_compliance: "AA Level"
+  
+  mobile_accessibility:
+    - touch_targets: "Minimum 44px"
+    - contrast_ratios: "4.5:1 for text"
+    - font_scaling: "Supports up to 200% zoom"
+    - screen_reader: "ARIA labels on all interactive elements"
+    - keyboard_navigation: "Tab order and focus management"
+  
+  indonesian_context:
+    - network_awareness: "Graceful degradation on slow connections"
+    - data_usage: "Optimized images and caching"
+    - device_compatibility: "Android 6+ support"
+
+performance_requirements:
+  loading_times:
+    first_contentful_paint: "< 1.5 seconds"
+    largest_contentful_paint: "< 2.5 seconds"
+    time_to_interactive: "< 3.5 seconds"
+  
+  optimization_strategies:
+    - image_compression: "WebP with JPG fallback"
+    - code_splitting: "Route-based lazy loading"
+    - service_worker: "Offline-first caching"
+    - api_caching: "Client-side data persistence"
+  
+  bandwidth_considerations:
+    - progressive_image_loading: "Low-res to high-res"
+    - data_saving_mode: "Text-only option"
+    - offline_functionality: "Core features work without connection"
+
+interaction_patterns:
+  mobile_first_gestures:
+    - swipe_navigation: "Between café cards in details"
+    - pull_to_refresh: "Update live data"
+    - pinch_to_zoom: "Map and image interactions"
+    - long_press: "Quick action menus"
+  
+  one_thumb_operation:
+    - bottom_navigation: "Primary navigation within thumb reach"
+    - floating_actions: "Key CTAs in thumb zone"
+    - modal_placement: "Actions at bottom of modal"
+  
+  progressive_disclosure:
+    - essential_first: "Key work info visible immediately"
+    - details_on_demand: "Full reviews and photos on tap"
+    - smart_defaults: "Most common filter selections pre-selected"
+
+community_features_ui:
+  social_proof:
+    - love_counters: "Visible community validation"
+    - recent_activity: "Latest user contributions"
+    - contributor_profiles: "Simple user identity system"
+  
+  content_moderation:
+    - report_functionality: "Flag inappropriate content"
+    - community_guidelines: "Easily accessible rules"
+    - positive_reinforcement: "Thank contributors for quality posts"
+
+data_integration:
+  google_sheets_backend:
+    - real_time_sync: "Data updates without page refresh"
+    - optimistic_updates: "Show changes immediately"
+    - conflict_resolution: "Handle concurrent edits gracefully"
+    - rate_limit_awareness: "Cache aggressively to stay within limits"
+
+technical_considerations:
+  framework_requirements:
+    - mobile_first: "Responsive breakpoints"
+    - component_library: "Reusable UI components"
+    - state_management: "Client-side data handling"
+    - routing: "SPA navigation with deep linking"
+  
+  deployment_constraints:
+    - static_hosting: "Compatible with Netlify/Vercel"
+    - no_server_side: "Client-side rendering only"
+    - cdn_optimization: "Global content delivery"
+    - environment_variables: "Secure API key management"
+
+success_metrics:
+  user_engagement:
+    - session_duration: "Average time spent per visit"
+    - return_visits: "30% weekly return rate target"
+    - contribution_rate: "Users adding cafés or reviews"
+  
+  usability_metrics:
+    - task_completion: "Successfully find and rate café"
+    - error_rates: "Form submission failures"
+    - accessibility_score: "Lighthouse accessibility rating"
+  
+  performance_monitoring:
+    - core_web_vitals: "Google PageSpeed insights"
+    - crash_reports: "JavaScript error tracking"
+    - offline_usage: "Service worker effectiveness"
+
+future_enhancements:
+  phase_2_features:
+    - advanced_comparison: "Side-by-side café comparison"
+    - real_time_status: "Live crowding and noise updates"
+    - social_features: "User connections and meetups"
+    - gamification: "Achievement system and leaderboards"
+  
+  technical_evolution:
+    - pwa_capabilities: "Install prompts and app-like experience"
+    - push_notifications: "New café alerts and status updates"
+    - offline_sync: "Queue actions for when online"
+    - api_migration: "Transition from Google Sheets to dedicated backend"
+
+# Implementation Priority
+implementation_phases:
+  week_1:
+    - basic_navigation: "Bottom nav and routing"
+    - café_gallery: "Card display with mock data"
+    - add_café_form: "Basic form with validation"
+  
+  week_2:
+    - google_sheets_integration: "Real data connection"
+    - rating_system: "Love button and basic feedback"
+    - responsive_design: "Mobile optimization"
+    - journal_basics: "Simple user tracking"
+  
+  future_phases:
+    - advanced_filters: "Complex search and filtering"
+    - community_features: "Social interactions and profiles"
+    - performance_optimization: "PWA features and offline mode"
+    - analytics_integration: "User behavior tracking"
