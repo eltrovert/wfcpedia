@@ -1,58 +1,76 @@
 export interface Location {
   latitude: number
   longitude: number
+  address: string
+  city: string
+  district?: string | undefined
 }
 
 export interface WorkMetrics {
   wifiSpeed: 'slow' | 'medium' | 'fast' | 'fiber'
-  powerOutlets: number
-  noiseLevel: 'quiet' | 'moderate' | 'loud'
   comfortRating: number // 1-5
-  crowdedness: 'low' | 'medium' | 'high'
-  workFriendliness: number // 1-5
+  noiseLevel: 'quiet' | 'moderate' | 'lively'
+  amenities: string[]
 }
 
-export interface OpeningHours {
-  monday: { open: string; close: string } | null
-  tuesday: { open: string; close: string } | null
-  wednesday: { open: string; close: string } | null
-  thursday: { open: string; close: string } | null
-  friday: { open: string; close: string } | null
-  saturday: { open: string; close: string } | null
-  sunday: { open: string; close: string } | null
+export interface OperatingHours {
+  [day: string]: {
+    open: string
+    close: string
+    is24Hours?: boolean
+  } | null
+}
+
+export interface CafeImage {
+  url: string
+  thumbnailUrl: string
+  uploadedBy: string
+  uploadedAt: string
+}
+
+export interface Community {
+  loveCount: number
+  lastUpdated: string
+  contributorId: string
+  verificationStatus: 'unverified' | 'verified' | 'premium'
 }
 
 export interface Cafe {
-  id: string
+  id: string // UUID
   name: string
-  address: string
-  city: string
   location: Location
   workMetrics: WorkMetrics
-  amenities: string[]
-  images: string[]
-  openingHours: OpeningHours
-  priceRange: 'budget' | 'moderate' | 'premium'
-  rating: number
-  reviewCount: number
-  tags: string[]
-  description: string
-  createdAt: string
-  updatedAt: string
+  operatingHours: OperatingHours
+  images: CafeImage[]
+  community: Community
+  createdAt: string // ISO date
+  updatedAt: string // ISO date
 }
 
-export interface CafeFilter {
+export interface CafeRating {
+  ratingId: string // UUID
+  cafeId: string // Reference to Cafe
+  sessionId: string // Anonymous session identifier
+  workMetrics?: Partial<WorkMetrics> | undefined // Optional partial updates
+  comment?: string | undefined // Max 280 chars
+  photos?: string[] | undefined // Array of photo URLs
+  loveGiven: boolean
+  ratedAt: string // ISO date
+}
+
+export interface FilterOptions {
   city?: string
+  district?: string
   wifiSpeed?: WorkMetrics['wifiSpeed']
-  priceRange?: Cafe['priceRange']
-  minRating?: number
+  minComfortRating?: number
+  noiseLevel?: WorkMetrics['noiseLevel']
   amenities?: string[]
-  workFriendliness?: number
+  verificationStatus?: Community['verificationStatus']
 }
 
 export interface CafeSearchParams {
   query?: string
-  location?: Location
+  location?: Pick<Location, 'latitude' | 'longitude'>
   radius?: number // in kilometers
-  filters?: CafeFilter
+  filters?: FilterOptions
 }
