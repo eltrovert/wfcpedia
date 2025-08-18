@@ -91,10 +91,52 @@ export class CafeService {
   }
 
   /**
-   * Add new cafe with optimistic updates
+   * Search cafes by location within a specified radius
    */
-  async addCafe(cafe: Cafe): Promise<void> {
+  async searchByLocation(
+    coordinates: { lat: number; lng: number },
+    radiusKm: number = 0.1
+  ): Promise<Cafe[]> {
+    try {
+      const allCafes = await this.getCafes()
+      const { locationService } = await import('./locationService')
+
+      return allCafes.filter(cafe => {
+        const distance = locationService.calculateDistance(coordinates, {
+          latitude: cafe.location.latitude,
+          longitude: cafe.location.longitude,
+        })
+        return distance <= radiusKm
+      })
+    } catch (error) {
+      console.error('Failed to search cafes by location:', error)
+      return []
+    }
+  }
+
+  /**
+   * Add new cafe with optimistic updates - Returns the created cafe with ID
+   */
+  async addCafe(
+    cafeData: Omit<Cafe, 'id' | 'community' | 'createdAt' | 'updatedAt'>,
+    contributorId: string = 'anonymous'
+  ): Promise<Cafe> {
     const networkStatus = getNetworkStatus()
+    const timestamp = new Date().toISOString()
+
+    // Generate ID and create full cafe object
+    const cafe: Cafe = {
+      id: crypto.randomUUID(),
+      ...cafeData,
+      community: {
+        loveCount: 0,
+        lastUpdated: timestamp,
+        contributorId,
+        verificationStatus: 'unverified',
+      },
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    }
 
     try {
       // Optimistic update - add to cache immediately
@@ -109,6 +151,8 @@ export class CafeService {
         // Queue for offline sync
         await syncService.queueCafeCreation(cafe)
       }
+
+      return cafe
     } catch (error) {
       // Remove from optimistic update if sync fails
       const existingCafes = await this.getCachedCafes()
