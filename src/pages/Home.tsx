@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import type { Cafe, FilterOptions } from '../types/cafe'
 import { CafeGallery } from '../components/cafe'
 import { TouchTarget } from '../components/ui/TouchTarget'
-import { useLocation } from '../hooks'
+import { OnboardingFlow } from '../components/onboarding'
+import { useLocation, useOnboarding } from '../hooks'
 
 /**
  * Home page component featuring café gallery with location-based defaults
@@ -22,6 +23,9 @@ export function Home(): JSX.Element {
     clearError,
     getCurrentCity,
   } = useLocation()
+
+  const { isOnboardingOpen, completeOnboarding, skipOnboarding } =
+    useOnboarding()
 
   // Update filters when location changes
   useEffect(() => {
@@ -44,7 +48,7 @@ export function Home(): JSX.Element {
   const handleCafeSelect = (cafe: Cafe) => {
     setSelectedCafe(cafe)
     // TODO: Navigate to café detail view or open modal
-    console.log('Selected café:', cafe.name)
+    console.warn('Selected café:', cafe.name)
   }
 
   const handleLocationRefresh = async () => {
@@ -68,7 +72,23 @@ export function Home(): JSX.Element {
 
   const handleFilterToggle = () => {
     // TODO: Open filter modal or drawer
-    console.log('Opening filters...')
+    console.warn('Opening filters...')
+  }
+
+  const handleOnboardingComplete = async () => {
+    try {
+      await completeOnboarding()
+    } catch (error) {
+      console.error('Failed to complete onboarding:', error)
+    }
+  }
+
+  const handleOnboardingSkip = async () => {
+    try {
+      await skipOnboarding()
+    } catch (error) {
+      console.error('Failed to skip onboarding:', error)
+    }
   }
 
   // Get location display text
@@ -152,7 +172,7 @@ export function Home(): JSX.Element {
           variant='primary'
           className='w-14 h-14 rounded-full shadow-lg bg-blue-500 hover:bg-blue-600'
           ariaLabel='Add new café'
-          onClick={() => console.log('Add café clicked')}
+          onClick={() => console.warn('Add café clicked')}
         >
           <span className='text-xl text-white'>+</span>
         </TouchTarget>
@@ -237,6 +257,14 @@ export function Home(): JSX.Element {
             Close
           </TouchTarget>
         </div>
+      )}
+
+      {/* Onboarding Flow */}
+      {isOnboardingOpen && (
+        <OnboardingFlow
+          onComplete={handleOnboardingComplete}
+          onSkip={handleOnboardingSkip}
+        />
       )}
     </div>
   )

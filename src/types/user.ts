@@ -43,6 +43,11 @@ export interface UserPreferences {
     showAllCafes: boolean
     clusterMarkers: boolean
   }
+  // Onboarding preferences
+  onboardingCompleted?: boolean
+  onboardingCompletedAt?: string // ISO date
+  onboardingSkipped?: boolean
+  onboardingSkippedAt?: string // ISO date
 }
 
 /**

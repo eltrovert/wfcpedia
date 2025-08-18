@@ -7,3 +7,4 @@ export {
   cafeKeys,
 } from './useCafes'
 export { createQueryClient, getQueryClient } from './useQueryClient'
+export { useOnboarding } from './useOnboarding'

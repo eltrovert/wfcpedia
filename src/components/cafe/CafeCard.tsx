@@ -5,7 +5,7 @@ import { TouchTarget, ProgressiveImage } from '../ui'
 interface CafeCardProps {
   cafe: Cafe
   onLoveToggle?: (cafeId: string) => void
-  onCardClick?: (cafe: Cafe) => void
+  onCardClick: (cafe: Cafe) => void
   className?: string
 }
 
@@ -19,8 +19,7 @@ export function CafeCard({
   onCardClick,
   className = '',
 }: CafeCardProps): JSX.Element {
-  const handleLoveClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
+  const handleLoveClick = () => {
     onLoveToggle?.(cafe.id)
   }
 
@@ -33,7 +32,9 @@ export function CafeCard({
   const thumbnailImage = cafe.images?.[0]?.thumbnailUrl || primaryImage
 
   // Format operating hours for current day
-  const today = new Date().toLocaleLowerCase().slice(0, 3) // 'mon', 'tue', etc.
+  const today = new Date()
+    .toLocaleDateString('en', { weekday: 'short' })
+    .toLowerCase() // 'mon', 'tue', etc.
   const todayHours = cafe.operatingHours[today]
   const hoursText = todayHours?.is24Hours
     ? '24 hours'

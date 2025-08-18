@@ -1,0 +1,252 @@
+/**
+ * Onboarding-specific styles optimized for Indonesian mobile networks
+ * Minimal file size, efficient animations, touch-optimized interactions
+ */
+
+/* Onboarding container optimizations */
+.onboarding-container {
+  /* Use transform instead of changing properties for better performance */
+  will-change: transform;
+  /* Smooth transitions without heavy animation */
+  transition: transform 0.2s ease-out;
+}
+
+/* Progressive loading skeleton for slow connections */
+.onboarding-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Touch optimization for Indonesian Android devices */
+.onboarding-touch-target {
+  /* Minimum 44px touch target for accessibility */
+  min-height: 44px;
+  min-width: 44px;
+  /* Improve touch response on Android */
+  touch-action: manipulation;
+  /* Remove tap highlights for custom styling */
+  -webkit-tap-highlight-color: transparent;
+  /* Better scrolling on mobile */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Optimized animations for lower-end devices */
+@media (prefers-reduced-motion: no-preference) {
+  .onboarding-step-transition {
+    transform: translateX(0);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .onboarding-step-enter {
+    transform: translateX(100%);
+  }
+
+  .onboarding-step-exit {
+    transform: translateX(-100%);
+  }
+}
+
+/* Reduce animations for battery saving */
+@media (prefers-reduced-motion: reduce) {
+  .onboarding-step-transition {
+    transition: none;
+  }
+
+  .onboarding-skeleton {
+    animation: none;
+  }
+}
+
+/* Network-aware image loading */
+.onboarding-image {
+  /* Lazy loading optimization */
+  loading: lazy;
+  /* Prevent layout shift */
+  width: 100%;
+  height: auto;
+  /* Smooth loading transition */
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.onboarding-image.loaded {
+  opacity: 1;
+}
+
+/* Data saver mode styles */
+.data-saver-mode .onboarding-image {
+  /* Further compress images */
+  filter: contrast(1.1) brightness(1.05);
+}
+
+.data-saver-mode .onboarding-background {
+  /* Reduce background complexity */
+  background: #f8f9fa;
+}
+
+/* Mobile-first responsive design for Indonesian viewports */
+@media (max-width: 360px) {
+  .onboarding-container {
+    padding: 12px;
+  }
+
+  .onboarding-text {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .onboarding-title {
+    font-size: 18px;
+    line-height: 1.3;
+  }
+}
+
+/* Optimized for common Indonesian device viewports */
+@media (min-width: 361px) and (max-width: 414px) {
+  .onboarding-container {
+    padding: 16px;
+  }
+
+  .onboarding-text {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .onboarding-title {
+    font-size: 20px;
+    line-height: 1.4;
+  }
+}
+
+/* Focus indicators for keyboard navigation */
+.onboarding-focusable:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  /* Ensure visibility on all backgrounds */
+  box-shadow:
+    0 0 0 2px #ffffff,
+    0 0 0 4px #3b82f6;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .onboarding-container {
+    border: 2px solid;
+  }
+
+  .onboarding-button {
+    border: 2px solid;
+    font-weight: bold;
+  }
+}
+
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+  .onboarding-skeleton {
+    background: linear-gradient(90deg, #2a2a2a 25%, #1a1a1a 50%, #2a2a2a 75%);
+  }
+
+  .data-saver-mode .onboarding-background {
+    background: #1f2937;
+  }
+}
+
+/* RTL support for potential Arabic translations */
+[dir='rtl'] .onboarding-step-enter {
+  transform: translateX(-100%);
+}
+
+[dir='rtl'] .onboarding-step-exit {
+  transform: translateX(100%);
+}
+
+/* Loading states for slow connections */
+.onboarding-loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.onboarding-loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.onboarding-loading::before {
+  content: '⏳';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  z-index: 1;
+}
+
+/* Efficient progress indicator */
+.onboarding-progress {
+  height: 4px;
+  background: #e5e7eb;
+  overflow: hidden;
+}
+
+.onboarding-progress-bar {
+  height: 100%;
+  background: #3b82f6;
+  transform-origin: left;
+  transition: transform 0.3s ease-out;
+}
+
+/* Offline mode styles */
+.offline-mode .onboarding-container {
+  filter: grayscale(0.3);
+}
+
+.offline-mode .onboarding-image {
+  display: none;
+}
+
+/* Cache-friendly gradients */
+.onboarding-gradient-blue {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+
+.onboarding-gradient-green {
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+}
+
+.onboarding-gradient-purple {
+  background: linear-gradient(135deg, #e9d5ff 0%, #ddd6fe 100%);
+}
+
+/* Performance optimization for interactions */
+.onboarding-interactive {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Reduced motion for battery optimization */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

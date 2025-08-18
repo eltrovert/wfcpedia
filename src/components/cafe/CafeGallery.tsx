@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react'
+import React, { useState, useCallback, useRef, useEffect } from 'react'
 import type { Cafe, FilterOptions } from '../../types/cafe'
 import { CafeCard } from './CafeCard'
 import { InfiniteScroll } from '../ui'
@@ -6,7 +6,7 @@ import { useCafes } from '../../hooks'
 
 interface CafeGalleryProps {
   filters?: FilterOptions
-  onCafeSelect?: (cafe: Cafe) => void
+  onCafeSelect: (cafe: Cafe) => void
   className?: string
 }
 
@@ -164,7 +164,7 @@ export function CafeGallery({
         Try adjusting your filters or check back later for new additions.
       </p>
       <button
-        onClick={() => loadCafes(true)}
+        onClick={() => refetch()}
         className='px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors'
       >
         Refresh
